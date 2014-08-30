@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// $COVERAGE-OFF$
 
 package org.apache.spark.util.random
 
 import java.nio.ByteBuffer
-import java.util.{Random => JavaRandom}
+import java.util.Random
 
 import scala.util.hashing.MurmurHash3
 
@@ -35,7 +36,7 @@ import org.apache.spark.util.Utils.timeIt
  * uses a regular Long. We can forgo thread safety since we use a new instance of the RNG
  * for each thread.
  */
-private[spark] class XORShiftRandom(init: Long) extends JavaRandom(init) {
+class XORShiftRandom(init: Long) extends java.util.Random(init) {
 
   def this() = this(System.nanoTime)
 
@@ -57,7 +58,7 @@ private[spark] class XORShiftRandom(init: Long) extends JavaRandom(init) {
 }
 
 /** Contains benchmark method and main method to run benchmark of the RNG */
-private[spark] object XORShiftRandom {
+object XORShiftRandom {
 
   /** Hash seeds to have 0/1 bits throughout. */
   private def hashSeed(seed: Long): Long = {
@@ -75,19 +76,18 @@ private[spark] object XORShiftRandom {
       println("Usage: XORShiftRandom number_of_random_numbers_to_generate")
       System.exit(1)
     }
-    println(benchmark(args(0).toInt))
+//    println(benchmark(args(0).toInt))
   }
 
   /**
    * @param numIters Number of random numbers to generate while running the benchmark
    * @return Map of execution times for {@link java.util.Random java.util.Random}
    * and XORShift
-   */
   def benchmark(numIters: Int) = {
 
     val seed = 1L
     val million = 1e6.toInt
-    val javaRand = new JavaRandom(seed)
+    val javaRand = new java.util.Random(seed)
     val xorRand = new XORShiftRandom(seed)
 
     // this is just to warm up the JIT - we're not timing anything
@@ -104,5 +104,6 @@ private[spark] object XORShiftRandom {
         "xorTime" -> iters {xorRand.nextInt()})
 
   }
-
+  */
 }
+// $COVERAGE-ON$

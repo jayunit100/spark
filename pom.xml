@@ -86,7 +86,7 @@
 
   <modules>
     <module>core</module>
-    <module>bagel</module>
+    <!--    <module>bagel</module>
     <module>graphx</module>
     <module>mllib</module>
     <module>tools</module>
@@ -101,7 +101,7 @@
     <module>external/flume</module>
     <module>external/zeromq</module>
     <module>external/mqtt</module>
-    <module>examples</module>
+    <module>examples</module>-->
   </modules>
 
   <properties>
@@ -111,7 +111,9 @@
     <java.version>1.6</java.version>
 
     <scala.version>2.10.4</scala.version>
+    <scala.short>2.10</scala.short>
     <scala.binary.version>2.10</scala.binary.version>
+    <maven.plugin.scala.version>0.99.2</maven.plugin.scala.version>
     <mesos.version>0.18.1</mesos.version>
     <mesos.classifier>shaded-protobuf</mesos.classifier>
     <akka.group>org.spark-project.akka</akka.group>
@@ -131,6 +133,9 @@
     <codahale.metrics.version>3.0.0</codahale.metrics.version>
     <avro.version>1.7.6</avro.version>
     <jets3t.version>0.7.1</jets3t.version>
+
+    <scoverage.version>0.99.2</scoverage.version>
+    <scala.test.version>1.0-RC2</scala.test.version>
 
     <PermGen>64m</PermGen>
     <MaxPermGen>512m</MaxPermGen>
@@ -258,7 +263,13 @@
         <groupId>org.slf4j</groupId>
         <artifactId>jul-to-slf4j</artifactId>
         <version>${slf4j.version}</version>
-      </dependency>
+</dependency>
+<dependency>
+	    <groupId>org.scoverage</groupId>
+	        <artifactId>scalac-scoverage-plugin_${scala.short}</artifactId>
+		    <version>${scoverage-plugin.version}</version>
+	    </dependency>
+
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
@@ -777,7 +788,9 @@
             </javacArgs>
           </configuration>
         </plugin>
-        <plugin>
+
+
+	<plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.1</version>
@@ -788,17 +801,18 @@
             <maxmem>1024m</maxmem>
             <fork>true</fork>
           </configuration>
-        </plugin>
+  </plugin>
+  <!--
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.17</version>
-          <configuration>
-            <!-- Uses scalatest instead -->
+	    <configuration>
             <skipTests>true</skipTests>
-          </configuration>
-        </plugin>
-        <plugin>
+	  </configuration>
+	</plugin>
+-->
+	<plugin>
           <groupId>org.scalatest</groupId>
           <artifactId>scalatest-maven-plugin</artifactId>
           <version>1.0-RC2</version>
@@ -817,7 +831,7 @@
               </goals>
             </execution>
           </executions>
-        </plugin>
+	</plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
@@ -866,9 +880,8 @@
         </plugin>
       </plugins>
     </pluginManagement>
-
     <plugins>
-      <plugin>
+	    <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
@@ -914,7 +927,34 @@
   </build>
 
   <profiles>
+	  <!--	  <profile>
+	<id>coverage</id>
+	<repositories><repository><id>scct-repo</id><url>http://mtkopone.github.com/scct/maven-repo</url></repository></repositories>
+	<dependencies><dependency><groupId>reaktor</groupId><artifactId>scct_2.10</artifactId><version>0.2-SNAPSHOT</version></dependency></dependencies>
+	<build>
+        <plugins><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>2.6</version><configuration><systemPropertyVariables><scct.project.name>${project.name}</scct.project.name>
+	<scct.coverage.file>${project.build.outputDirectory}/coverage.data</scct.coverage.file><scct.report.dir>${project.build.directory}/coverage-report</scct.report.dir><scct.source.dir>${project.build.sourceDirectory}</scct.source.dir></systemPropertyVariables></configuration></plugin>
+	  <plugin><groupId>net.alchim31.maven</groupId>
+		<artifactId>scala-maven-plugin</artifactId>
+		<executions>
+			<execution><id>scala-compile-first</id>
+				<configuration>
+					<args>
+						<args>-P:scct:projectId:${project.name}</args>
+						<args>-P:scct:basedir:${project.basedir}</args>
+					</args>
+					<compilerPlugins>
+		  <compilerPlugin>
+			<groupId>reaktor</groupId>
+			<artifactId>scct_2.10</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		  </compilerPlugin>
+		</compilerPlugins></configuration></execution></executions>
+       </plugin>
+   </plugins>
+	</build>
 
+   </profile>-->
     <!-- Ganglia integration is not included by default due to LGPL-licensed code -->
     <profile>
       <id>spark-ganglia-lgpl</id>

@@ -77,7 +77,7 @@ class BroadcastSuite extends FunSuite with LocalSparkContext {
     val results = sc.parallelize(1 to numSlaves).map(x => (x, broadcast.value.sum))
     assert(results.collect().toSet === (1 to numSlaves).map(x => (x, 10)).toSet)
   }
-
+/**
   test("Unpersisting HttpBroadcast on executors only in local mode") {
     testUnpersistHttpBroadcast(distributed = false, removeFromDriver = false)
   }
@@ -97,6 +97,7 @@ class BroadcastSuite extends FunSuite with LocalSparkContext {
   test("Unpersisting TorrentBroadcast on executors only in local mode") {
     testUnpersistTorrentBroadcast(distributed = false, removeFromDriver = false)
   }
+*/ 
 
   test("Unpersisting TorrentBroadcast on executors and driver in local mode") {
     testUnpersistTorrentBroadcast(distributed = false, removeFromDriver = true)

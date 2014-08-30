@@ -29,7 +29,7 @@ import java.nio.channels._
 import scala.collection.mutable.{ArrayBuffer, HashMap, Queue}
 
 import org.apache.spark._
-
+// $COVERAGE-OFF$
 private[spark]
 abstract class Connection(val channel: SocketChannel, val selector: Selector,
     val socketRemoteConnectionManagerId: ConnectionManagerId, val connectionId: ConnectionId)
@@ -592,3 +592,4 @@ private[spark] class ReceivingConnection(
   // For read conn, always false.
   override def resetForceReregister(): Boolean = false
 }
+// $COVERAGE-ON$
